@@ -1,7 +1,7 @@
-// require() (import) the express module,square module
 const express = require('express')
 const square = require('./square')
 const wiki = require('./wiki')
+const path = require('path')
 const MongoClient = require('mongodb').MongoClient
 const url = 'mongodb://localhost:27017/contacts'
 
@@ -12,7 +12,7 @@ const PORT = 3000
 
 // app.all(), routing method will be called in response to any HTTP method. This is used for loading middleware functions at a
 // particular path for all request methods.
-
+/*
 app.all('/secret', function (req, res, next) {
   res.send('Secret book')
   console.log('Accessing the secret section ...')
@@ -25,19 +25,33 @@ const logger = function (req, res, next) {
 }
 
 app.use(logger)
+*/
+
+// setting the template engine to use and the location where Express should look for templates using the 'views' and 'view engines'
+// settings
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+
+// Response.render() is used to render a specified template
+app.get('/', function (req, res) {
+  res.render('index', {
+    title: 'Customers'
+  })
+})
+
 // we can use the express.static middleware to serve static files, including images, CSS and JavaScript files from a directory named
 // 'public' at the same level as where we call node
 // Any files in the public directory are served by adding their filename (relative to the base "public" directory) to the base URL
 
 app.use(express.static('public'))
-app.use(express.static('src'))
+// app.use(express.static('src'))
 
 // You can also create a virtual prefix for your static URLs, rather than having the files added to the base URL.
 app.use('/contacts', express.static('public'))
 
 // The app.get() method specifies a callback(route handler) function that will be invoked whenever there is an HTTP GET request with a path ('/')
 // relative to the site root.
-app.get('/', function (req, res) {
+app.get('/hello', function (req, res) {
   res.send('Hello World')
 })
 
@@ -57,6 +71,7 @@ app.get('/area', function (req, res) {
 
 app.get('/contacts', function (req, res) {
   const dbo = db.db('contacts')
+  // const query = {State: 'Karnataka'}
   dbo.collection('contacts').find({}).toArray(function (err, result) {
     if (err) throw err
     res.send(result)
@@ -72,4 +87,6 @@ MongoClient.connect(url, function (err, db1) {
   app.listen(PORT, function () {
     console.log('Example app listening on port ', PORT)
   })
+  // const server = app.listen(3000)
+  // const everyone = require('now').initialize(server)
 })

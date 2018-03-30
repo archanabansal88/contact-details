@@ -1,5 +1,5 @@
 {
-  "name": "contact-details",
+  "name": "express-learning",
   "version": "1.0.0",
   "description": "Learning Express",
   "main": "index.js",
@@ -11,7 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
-    "mongodb": "^3.0.5"
+    "mongodb": "^3.0.5",
+    "ejs": "*"
   },
   "devDependencies": {
     "nodemon": "^1.17.2"
